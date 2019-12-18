@@ -5,6 +5,8 @@
 #include "Structs/GameModeSettings.h"
 #include "HandlePlayerCameraComponent.generated.h"
 
+//TO DO:
+//Remove unused stuff
 UCLASS()
 class GROUP8_API UHandlePlayerCameraComponent : public UActorComponent
 {
@@ -21,10 +23,7 @@ public:
 	void LookHorizontal( float InputValue );
 
 	void ResetCameraPosition();
-	void ChangeCameraRotation();
 	void ResetCameraLerp( float DeltaTime );
-
-	void ShakeCamera();
 
 	//fade
 	UFUNCTION()
@@ -83,8 +82,6 @@ protected:
 	TArray<AActor*> HitActors;
 	TArray<AActor*> PreviousHitActors;
 
-	//TArray<FHitResult> Hits;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Scenery Fade")
 	float SceneryFadeTimer = 0.1f;
 	bool bCanFade = true;
@@ -101,8 +98,8 @@ protected:
 
 	//Gamemode settings
 
-	float LocalLookVerticalSens = 1.f;
-	float LocalLookHorizontalSens = 1.f;
+	float LocalLookVerticalSense = 1.f;
+	float LocalLookHorizontalSense = 1.f;
 
 	bool bVerticalInputInverted = false;
 	bool bHorizontalInputInverted = false;

@@ -8,6 +8,9 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnDash );
 
 
+//TO DO
+//Remove unused code
+
 UCLASS( Blueprintable )
 class GROUP8_API UDashComponent : public USphereComponent
 {
@@ -20,14 +23,12 @@ public:
 	UDashComponent();
 
 	virtual void BeginPlay() override;
-
 	virtual void TickComponent( float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction ) override;
 
 	//Getter functions
 public:
 
 	float GetDashCooldown() { return DashCooldown; }
-
 	bool IsOverlappingDashable();
 
 	//Variables
@@ -51,7 +52,7 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, meta = ( UIMin = "0.1", UIMax = "1.0" ), Category = Settings )
 	float DashDuration = 0.5f;
 
-	//The time in Seconds it takes from when the Dash starts to when the player can dash again
+	///The time in Seconds it takes from when the Dash starts to when the player can dash again
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, meta = ( UIMin = 0.1f, UIMax = 10.f ) )
 	float DashCooldown = 2.f;
 
@@ -93,8 +94,6 @@ public:
 	void DashHit( class ADashInteractableActor* HitActor, class APlayerCharacter* Char );
 	void Dash();
 	void StopDash();
-
-	void OnDashStart();
 
 	UFUNCTION()
 	void OnDashBeginOverlap( UPrimitiveComponent* OverlappedComponent,

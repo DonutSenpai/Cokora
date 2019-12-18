@@ -2,12 +2,12 @@
 
 #include "AbilityBerryEnum.generated.h"
 
+//TO DO
+//Remove unused types
 UENUM(BlueprintType)
 enum class EAbilityBerry : uint8
 {
 	AB_None,
-	AB_Hover,
 	AB_Dash,
-	AB_Jump,
-	AB_Tongue
+	AB_Jump
 };

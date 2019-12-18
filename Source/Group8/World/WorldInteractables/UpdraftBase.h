@@ -2,6 +2,9 @@
 #include "GameFramework/Actor.h"
 #include "UpdraftBase.generated.h"
 
+
+//TO DO:
+//- Remove unused code
 UCLASS()
 class GROUP8_API AUpdraftBase : public AActor
 {
@@ -39,9 +42,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Root")
 	class USceneComponent* Root = nullptr;
-
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Overlap Sphere")
-	class USphereComponent* InteractableChecker;*/
 
 	UPROPERTY( VisibleDefaultsOnly, BlueprintReadWrite )
 	class UCapsuleComponent* UpdraftCollision = nullptr;

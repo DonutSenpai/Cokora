@@ -2,6 +2,8 @@
 
 #include "AbilityStateEnum.generated.h"
 
+//TO DO
+//Removed unused types
 UENUM( BlueprintType )
 enum class EAbilityState : uint8
 {
@@ -14,7 +16,4 @@ enum class EAbilityState : uint8
 	AS_AirDash,
 	AS_ShortDash,
 	AS_Push,
-	AS_TongueInteracting,
-	AS_TongueGrappling
-
 };

@@ -4,6 +4,10 @@
 #include "../Enums/AbilityStateEnum.h"
 #include "PlayerCharacter.generated.h"
 
+
+//TO DO: 
+//-Clean up this whole class, has a lot of unused functionality
+
 UCLASS( Blueprintable )
 class GROUP8_API APlayerCharacter : public ACharacter
 {
@@ -13,14 +17,10 @@ class GROUP8_API APlayerCharacter : public ACharacter
 public:
 
 	APlayerCharacter();
-
 	virtual void BeginPlay() override;
-
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent( UInputComponent* InputComponent ) override;
-
-	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode = 0) override;
+	virtual void SetupPlayerInputComponent( UInputComponent* InputComponent ) override;	
 
 	virtual void Landed(const FHitResult& Hit) override;
 
@@ -30,7 +30,6 @@ public:
 //Get functions
 public:
 
-	class UHoverComponent* GetHoverComponent() const { return HoverComponent; }
 	class UDashComponent* GetDashComponent() const { return DashComponent; }
 	class UAbilityStateComponent* GetAbilityStateComponent() { return AbilityStateComponent; }
 	class UHandlePlayerCameraComponent* GetHandlePlayerCameraComponent() { return CameraComponent; }
@@ -42,15 +41,15 @@ public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadWrite )
 	class UCharacterRotationComponent* RotationComponent = nullptr;
 
-	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
-	class UHoverComponent* HoverComponent = nullptr;
-
 	UPROPERTY( VisibleAnywhere, BlueprintReadWrite )
 	class UDashComponent* DashComponent = nullptr;
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
 	class UAbilityStateComponent* AbilityStateComponent = nullptr;
 
+	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
+	class UHandlePlayerMovementComponent* MoveComponent = nullptr;
+	
 	UPROPERTY( VisibleAnywhere, BlueprintReadWrite )
 	class USpringArmComponent* CameraBoom = nullptr;
 
@@ -63,11 +62,6 @@ public:
 	UPROPERTY( VisibleAnywhere, BlueprintReadWrite )
 	class UCameraComponent* Camera = nullptr;
 
-	UPROPERTY( VisibleAnywhere, BlueprintReadWrite )
-	class USceneComponent* ThingPivot = nullptr;
-
-	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
-	class UHandlePlayerMovementComponent* MoveComponent = nullptr;
 protected:
 
 	UPROPERTY( VisibleAnywhere, BlueprintReadOnly )
@@ -82,13 +76,14 @@ public:
 public:
 
 	UFUNCTION( BlueprintCallable )
-		void DisablePlayerInput();
+	void DisablePlayerInput();
 
 	UFUNCTION( BlueprintCallable )
-		void EnablePlayerInput();
+	void EnablePlayerInput();
 
+	//Used for debugging state in blueprints
 	UFUNCTION( BlueprintImplementableEvent )
-		void PrintEnum( EAbilityState EnumToPrint );
+	void BP_PrintEnum( EAbilityState EnumToPrint );
 
 	//BP Events abilities
 	UFUNCTION( BlueprintImplementableEvent )

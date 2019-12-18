@@ -7,6 +7,9 @@
 #include "Components/ArrowComponent.h"
 #include "Player/CharacterRotationComponent.h"
 
+//TO DO
+//Remove unused code
+
 UDashComponent::UDashComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -38,7 +41,6 @@ void UDashComponent::TickComponent( float DeltaTime, enum ELevelTick TickType, F
 	{
 		MovementSpeedLerp( DeltaTime );
 	}
-
 }
 
 
@@ -110,15 +112,11 @@ void UDashComponent::Dash()
 	
 	OwningChar->RotationComponent->bInputDisabled = true;
 
-	//UE_LOG( LogTemp, Warning, TEXT( "Ability state is dash" ) );
-
-
 	TargetVelocity = OwningChar->GetActorForwardVector() * DashSpeed;
 
 	if( HitDashable && OwningChar->GetAbilityStateComponent()->GetAbilityState() == EAbilityState::AS_AirDash )
 	{
 		DashHit( HitDashable, OwningChar );
-	//	StopDash();
 
 	}
 	if( bShortDistanceDash )
@@ -126,10 +124,6 @@ void UDashComponent::Dash()
 		InitialLocation = OwningChar->GetActorLocation();
 		TargetLocation = OwningChar->GetActorLocation() + OwningChar->GetActorForwardVector() * -50.f;
 	}
-
-
-
-
 }
 
 void UDashComponent::StopDash()
@@ -137,14 +131,11 @@ void UDashComponent::StopDash()
 	if( bShortDistanceDash && HitDashable )
 	{
 		DashHit( HitDashable, OwningChar );
-
 	}
 
 	ResetVariables();
 
 	OwningChar->GetCharacterMovement()->Velocity = OwningChar->GetCharacterMovement()->Velocity.GetClampedToMaxSize( MaxWalkSpeed );
-
-	//UE_LOG(LogTemp, Warning, TEXT("StopDash is run"));
 }
 
 void UDashComponent::OnDashBeginOverlap( UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult )
@@ -161,8 +152,7 @@ void UDashComponent::OnDashBeginOverlap( UPrimitiveComponent* OverlappedComponen
 				DashHit( Hit, OwningChar );
 				return;
 			}
-
-			//UE_LOG( LogTemp, Error, TEXT( "Hit item is a bush" ) );
+		
 		}
 
 
@@ -173,10 +163,6 @@ void UDashComponent::OnDashBeginOverlap( UPrimitiveComponent* OverlappedComponen
 				DashHit( HitDashable, OwningChar );
 				StopDash();
 			}
-		}
-		else
-		{
-			//bShortDistanceDash = true;
 		}
 	}
 }
@@ -192,8 +178,6 @@ void UDashComponent::OnDashEndOverlap( UPrimitiveComponent* OverlappedComponent,
 void UDashComponent::MovementSpeedLerp( float DeltaTime )
 {
 	LerpAlpha += DeltaTime * ( 1.f / DashDuration );
-
-	//UE_LOG( LogTemp, Warning, TEXT( "LerpAlpha: %f" ), LerpAlpha );
 
 	if( LerpAlpha >= 1.f )
 	{
@@ -213,10 +197,9 @@ void UDashComponent::MovementSpeedLerp( float DeltaTime )
 
 void UDashComponent::ShortDistanceDashLerp( float DeltaTime )
 {
+	//Used for debugging state in blueprints
+	OwningChar->BP_PrintEnum( EAbilityState::AS_Dash );
 
-	//UE_LOG( LogTemp, Warning, TEXT( "ShortDistanceDashLerp is run" ) );
-
-	OwningChar->PrintEnum( EAbilityState::AS_Dash );
 	LerpAlpha += DeltaTime * 5.f;
 
 	if( !bBool && LerpAlpha >= 1.f )
@@ -245,9 +228,7 @@ void UDashComponent::ShortDistanceDashLerp( float DeltaTime )
 	{
 		TargetLocationX = FMath::Lerp( OwningChar->GetActorLocation().X, TargetLocation.X, LerpAlpha );
 		TargetLocationY = FMath::Lerp( OwningChar->GetActorLocation().Y, TargetLocation.Y, LerpAlpha );
-
 	}
-
 
 	FVector NewLocation = FVector( TargetLocationX, TargetLocationY, OwningChar->GetActorLocation().Z );
 
@@ -260,7 +241,6 @@ void UDashComponent::SetVariables()
 	OwningChar->GetCharacterMovement()->MaxWalkSpeed = DashSpeed;
 	OwningChar->GetCharacterMovement()->MaxAcceleration = 10000.f;
 	OwningChar->GetCharacterMovement()->GroundFriction = 0.f;
-
 }
 
 void UDashComponent::ResetVariables()
@@ -271,8 +251,6 @@ void UDashComponent::ResetVariables()
 	bBool = false;
 
 	OwningChar->RotationComponent->bInputDisabled = false;
-
-
 
 	OwningChar->GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	OwningChar->GetCharacterMovement()->MaxAcceleration = 2048.f;

@@ -5,6 +5,8 @@
 #include "Enums/AbilityStateEnum.h"
 #include "CharacterRotationComponent.generated.h"
 
+//TO DO
+//Clean up stuff
 UCLASS()
 class UCharacterRotationComponent : public UActorComponent
 {
@@ -18,7 +20,6 @@ public:
 public:
 
 	virtual void BeginPlay() override;
-
 	virtual void TickComponent( float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction ) override;
 
 	//Variables
@@ -33,7 +34,6 @@ public:
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float LerpSpeed = 7.f;
 
-
 	UPROPERTY( EditAnywhere, BlueprintReadWrite )
 	float StartWalkingLerpSpeed = 16.f;
 
@@ -43,14 +43,6 @@ public:
 private:
 
 	bool bAccelerationLerp = false;
-
-
-
-	//Functions
-public:
-
-	UFUNCTION()
-	void OnAbilityStateChanged( EAbilityState NewState, EAbilityState PreviousState );
 
 	//Functions
 private:
@@ -63,7 +55,7 @@ private:
 	void SetLerpState();
 
 	UFUNCTION()
-		void StartedWalking();
+	void StartedWalking();
 
 	bool bRightInput = false;
 	bool bForwardInput = false;

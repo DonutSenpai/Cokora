@@ -1,14 +1,7 @@
 #include "MainGameMode.h"
 
-AMainGameMode::AMainGameMode()
-{
-
-}
-
-void AMainGameMode::OnSettingsChanged()
-{
-	
-}
+//TO DO
+//Removed unused stuff
 
 void AMainGameMode::ChangeGameSettings( FGameModeSettings NewSettings )
 {

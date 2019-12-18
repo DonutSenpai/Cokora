@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "GameModeSettings.generated.h"
 
+//TO DO
+//fixed wrong spellings
 USTRUCT( BlueprintType )
 struct FGameModeSettings
 {
@@ -10,10 +12,10 @@ struct FGameModeSettings
 
 		//Game Settings
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Game Settings" )
-	float LookVerticalSens = 1.f;
+	float LookVerticalSense = 1.f;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Game Settings" )
-	float LookHorizontalSens = 1.f;
+	float LookHorizontalSense = 1.f;
 
 	UPROPERTY( EditDefaultsOnly, BlueprintReadWrite, Category = "Game Settings" )
 	bool bInvertLookVertical = false;

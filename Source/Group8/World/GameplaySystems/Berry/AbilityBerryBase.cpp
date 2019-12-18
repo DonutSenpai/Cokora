@@ -2,10 +2,11 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Player/PlayerCharacter.h"
-#include "Components/HoverComponent.h"
 #include "Components/DashComponent.h"
 #include "Components/Player/AbilityStateComponent.h"
 
+//TO DO
+//Clean up this file
 AAbilityBerryBase::AAbilityBerryBase()
 {
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
@@ -21,11 +22,6 @@ AAbilityBerryBase::AAbilityBerryBase()
 	}
 }
 
-void AAbilityBerryBase::BeginPlay()
-{
-
-}
-
 void AAbilityBerryBase::OnBeginSphereOverlap( class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult )
 {
 	if (APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor))
@@ -33,12 +29,7 @@ void AAbilityBerryBase::OnBeginSphereOverlap( class UPrimitiveComponent* HitComp
 		PlayerCharacter->GetAbilityStateComponent()->SetStateToNone();
 		switch(BerryType)
 		{
-			case EAbilityBerry::AB_Hover:
-			{
-				PlayerCharacter->GetHoverComponent()->SetAbilityActive();
-				OnPickUp(BerryType);
-				break;
-			}
+			
 			case EAbilityBerry::AB_Dash:
 			{
 				PlayerCharacter->GetDashComponent()->SetAbilityActive();

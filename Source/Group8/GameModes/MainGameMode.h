@@ -17,11 +17,6 @@ class GROUP8_API AMainGameMode : public AGameModeBase
 	
 public:
 
-	AMainGameMode();
-
-	//UFUNCTION(BlueprintCallable, Category = "Game Settings")
-	void OnSettingsChanged();
-
 	FORCEINLINE FGameModeSettings GetGameSettings() const { return GameSettings; }
 
 	UFUNCTION(BlueprintCallable, Category = "Game Settings")
@@ -33,7 +28,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game Settings")
 	FGameModeSettings GameSettings;
 
-protected:
 	
 };
 

@@ -6,7 +6,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE( FOnMovementChanged );
 
-
+//TO DO
+//Clean up this class
 UCLASS( Blueprintable )
 class GROUP8_API UHandlePlayerMovementComponent : public UActorComponent
 {
@@ -18,15 +19,11 @@ public:
 
 	virtual void BeginPlay() override;
 
-	virtual void TickComponent( float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction ) override;
-
-
 	//Getter Functions
 public:
 
 	FORCEINLINE bool GetHasForwardInput() const { return bForwardInput; }
 	FORCEINLINE bool GetHasRightInput() const { return bRightInput; }
-
 	FORCEINLINE bool GetHasAnyInput() const { return ( bRightInput || bForwardInput ); }
 
 	//Variables
@@ -65,17 +62,12 @@ public:
 	void MoveRight(float InputValue);
 
 	UFUNCTION()
-	void Jump();
-
-	UFUNCTION()
 	void OnAbilityStateChanged( EAbilityState NewState, EAbilityState PreviousState );
 
 	//Functions
 private:
 	void EnterJumpState();
 	void ExitJumpState();
-
-	void SetDirectionVector();
 
 	FVector MovmentDirection = FVector::ZeroVector;
 

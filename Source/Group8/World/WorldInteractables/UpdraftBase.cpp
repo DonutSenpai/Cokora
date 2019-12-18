@@ -2,13 +2,12 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Player/PlayerCharacter.h"
-#include "../../Components/HoverComponent.h"
 #include "Components/Player/AbilityStateComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "TimerManager.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "../DashInteractables/DashPushInteractableActor.h"
+#include "../DashInteractables/DashInteractableActor.h"
 
 AUpdraftBase::AUpdraftBase()
 {
@@ -25,8 +24,6 @@ AUpdraftBase::AUpdraftBase()
 	UpdraftExitCollision = CreateDefaultSubobject<UCapsuleComponent>( "UpdraftExitCollision" );
 	UpdraftExitCollision->SetupAttachment( RootComponent );
 	UpdraftExitCollision->SetGenerateOverlapEvents( true );
-
-	//UpdraftCollision->OnComponentBeginOverlap.AddDynamic( this, &AUpdraftBase::OnPlayerBeginOverlap );
 
 	TargetPlayerLocation = CreateDefaultSubobject<UStaticMeshComponent>( "TargetPlayerLocation" );
 	TargetPlayerLocation->SetupAttachment( RootComponent );
@@ -98,7 +95,6 @@ void AUpdraftBase::OnInnerEndOverlap( class UPrimitiveComponent* OverlappedComp,
 
 	if( DashInteractable )
 	{
-		//UE_LOG( LogTemp, Warning, TEXT( "Interactable END overlap" ) );
 		if( bIsBlocked )
 		{
 			ActivateDraft();

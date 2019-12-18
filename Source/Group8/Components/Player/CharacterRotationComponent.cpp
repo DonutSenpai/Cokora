@@ -6,6 +6,9 @@
 #include "Enums/AbilityStateEnum.h"
 #include "AbilityStateComponent.h"
 
+
+//TO DO
+//Clean up a lot of stuff
 UCharacterRotationComponent::UCharacterRotationComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -15,7 +18,6 @@ void UCharacterRotationComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	OwningChar->GetHandleMovementComponent()->OnStartedWalking.AddDynamic( this, &UCharacterRotationComponent::StartedWalking );
-	OwningChar->GetAbilityStateComponent()->AbilityStateChanged.AddDynamic( this, &UCharacterRotationComponent::OnAbilityStateChanged );
 }
 
 void UCharacterRotationComponent::TickComponent( float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction )
@@ -32,30 +34,9 @@ void UCharacterRotationComponent::TickComponent( float DeltaTime, enum ELevelTic
 	}
 }
 
-void UCharacterRotationComponent::OnAbilityStateChanged( EAbilityState NewState, EAbilityState PreviousState )
-{
-/*
-	if( NewState == EAbilityState::AS_Dash || NewState == EAbilityState::AS_AirDash )
-	{
-		bInputDisabled = true;
-	}
-
-	if( OwningChar->AbilityStateComponent->PreviousAbilityState == EAbilityState::AS_Dash || OwningChar->AbilityStateComponent->PreviousAbilityState == EAbilityState::AS_AirDash )
-	{
-		bInputDisabled = false;
-	}*/
-}
-
 void UCharacterRotationComponent::LerpCharacter( float DeltaTime )
 {
-
-	OwningChar->ThingPivot->SetWorldLocation( OwningChar->GetActorLocation() + ( GetDirectionVector() * 100.f ) );
-
-	//FMath::Lerp( OwningChar->GetActorRotation(), GetDirectionVector().Rotation(), )
-
 	FRotator NewRotation = FMath::RInterpTo( OwningChar->GetActorRotation(), GetDirectionVector().Rotation(), DeltaTime, CurrentLerpSpeed );
-
-	//UE_LOG( LogTemp, Warning, TEXT( "Lerp Speed: %f" ), CurrentLerpSpeed );
 
 	OwningChar->SetActorRotation( NewRotation );
 
@@ -65,11 +46,9 @@ void UCharacterRotationComponent::LerpCharacter( float DeltaTime )
 		{
 			bAccelerationLerp = false;
 			OwningChar->GetCharacterMovement()->MaxAcceleration = 1800.f;
-			//OwningChar->GetHandleMovementComponent()->bInputDisabled = false;
 		}
 
 	}
-
 
 }
 
@@ -128,5 +107,4 @@ void UCharacterRotationComponent::StartedWalking()
 {
 	bAccelerationLerp = true;
 	OwningChar->GetCharacterMovement()->MaxAcceleration = 1000.f;
-	//OwningChar->GetHandleMovementComponent()->bInputDisabled = true;
 }

@@ -1,10 +1,11 @@
 #include "HandlePlayerMovementComponent.h"
 #include "Player/PlayerCharacter.h"
-#include "HoverComponent.h"
-
 #include "Player/AbilityStateComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+
+//TO DO
+//Remove unused code
 UHandlePlayerMovementComponent::UHandlePlayerMovementComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -19,26 +20,22 @@ void UHandlePlayerMovementComponent::BeginPlay()
 
 }
 
-void UHandlePlayerMovementComponent::TickComponent( float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction )
-{
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
-}
-
 void UHandlePlayerMovementComponent::MoveForward( float InputValue )
 {
 	if( bInputDisabled ) return;
 
 	PreviousInputValForward = InputValueForward;
 	InputValueForward = InputValue;
-
 	bForwardInput = InputValue != 0.f;
 
-	if( !FMath::IsNearlyZero( InputValueForward, KINDA_SMALL_NUMBER ) && FMath::IsNearlyZero( PreviousInputValForward, KINDA_SMALL_NUMBER ) &&
+	if( !FMath::IsNearlyZero( InputValueForward, KINDA_SMALL_NUMBER ) && 
+		FMath::IsNearlyZero( PreviousInputValForward, KINDA_SMALL_NUMBER ) &&
 		FMath::IsNearlyZero(PreviousInputValRight, KINDA_SMALL_NUMBER))
-	{
-		//UE_LOG( LogTemp, Warning, TEXT("On started walking happened") );
-			OnStartedWalking.Broadcast();
+
+	{	
+		OnStartedWalking.Broadcast();	
 	}
+
 	else if( FMath::IsNearlyZero( InputValueForward, KINDA_SMALL_NUMBER ) && FMath::IsNearlyZero( InputValueRight, KINDA_SMALL_NUMBER ) )
 	{
 		OnStoppedWalking.Broadcast();
@@ -47,7 +44,9 @@ void UHandlePlayerMovementComponent::MoveForward( float InputValue )
 	if( InputValue != 0.f )
 	{
 		if( OwningChar->GetAbilityStateComponent()->GetAbilityState()== EAbilityState::AS_Dash ) return;
+
 		bool bIsStatePush = OwningChar->GetAbilityStateComponent()->GetAbilityState() == EAbilityState::AS_Push;
+
 		if( bIsStatePush && InputValue <= 0 )
 		{
 			return;
@@ -70,8 +69,7 @@ void UHandlePlayerMovementComponent::MoveRight( float InputValue )
 
 	if( !FMath::IsNearlyZero( InputValueRight, KINDA_SMALL_NUMBER ) && FMath::IsNearlyZero( PreviousInputValRight, KINDA_SMALL_NUMBER ) &&
 		FMath::IsNearlyZero(PreviousInputValForward, KINDA_SMALL_NUMBER))
-	{
-		//UE_LOG( LogTemp, Warning, TEXT( "On started walking happened" ) );
+	{		
 		OnStartedWalking.Broadcast();
 	}
 	else if( FMath::IsNearlyZero( InputValueForward, KINDA_SMALL_NUMBER ) && FMath::IsNearlyZero( InputValueRight, KINDA_SMALL_NUMBER ) )
@@ -81,10 +79,9 @@ void UHandlePlayerMovementComponent::MoveRight( float InputValue )
 
 	if( InputValue != 0 )
 	{
-
-
 		if( OwningChar->GetAbilityStateComponent()->GetAbilityState() == EAbilityState::AS_Dash ) return;
 		if( OwningChar->GetAbilityStateComponent()->GetAbilityState() == EAbilityState::AS_Push ) return;
+
 		// find out which way is right
 		FRotator Rotation = OwningChar->GetControlRotation();
 		FRotator YawRotation( 0, Rotation.Yaw, 0 );
@@ -93,15 +90,7 @@ void UHandlePlayerMovementComponent::MoveRight( float InputValue )
 		FVector Direction = FRotationMatrix( YawRotation ).GetUnitAxis( EAxis::Y );
 
 		OwningChar->AddMovementInput( Direction, InputValue );
-
 	}
-
-
-}
-
-void UHandlePlayerMovementComponent::Jump()
-{
-
 }
 
 void UHandlePlayerMovementComponent::OnAbilityStateChanged( EAbilityState NewState, EAbilityState PreviousState )

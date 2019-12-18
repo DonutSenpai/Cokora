@@ -6,12 +6,15 @@
 #include "Camera/CameraComponent.h"
 #include "Components/HandlePlayerCameraComponent.h"
 #include "Components/DashComponent.h"
-#include "Components/HoverComponent.h"
 #include "World/DashInteractables/DashInteractableActor.h"
 #include "Components/Player/AbilityStateComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Components/Player/CharacterRotationComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
+
+//TO DO
+//Clean up this class and remove unused code
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -23,9 +26,6 @@ APlayerCharacter::APlayerCharacter()
 	MoveComponent->OwningChar = this;
 	CameraComponent = CreateDefaultSubobject<UHandlePlayerCameraComponent>( "CameraComponent" );
 	CameraComponent->OwningChar = this;
-
-	HoverComponent = CreateDefaultSubobject<UHoverComponent>( "HoverComponent" );
-	HoverComponent->OwningChar = this;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>( "CameraBoom" );
 	CameraBoom->SetupAttachment( GetCapsuleComponent() );
@@ -47,9 +47,6 @@ APlayerCharacter::APlayerCharacter()
 
 	RotationComponent = CreateDefaultSubobject<UCharacterRotationComponent>( "RotationComponent" );
 	RotationComponent->OwningChar = this;
-
-	ThingPivot = CreateDefaultSubobject<USceneComponent>( "ThingPivot" );
-	ThingPivot->SetupAttachment( RootComponent );
 
 	SetActorTickEnabled( true );
 	PrimaryActorTick.bCanEverTick = true;
@@ -91,11 +88,6 @@ void APlayerCharacter::SetupPlayerInputComponent( UInputComponent* InputComponen
 
 }
 
-void APlayerCharacter::OnMovementModeChanged( EMovementMode PrevMovementMode, uint8 PreviousCustomMode /*= 0*/ )
-{
-	Super::OnMovementModeChanged( PrevMovementMode, PreviousCustomMode );
-	//HoverComponent->OnMovementModeChanged( PrevMovementMode, PreviousCustomMode );
-}
 
 void APlayerCharacter::Landed( const FHitResult& Hit )
 {

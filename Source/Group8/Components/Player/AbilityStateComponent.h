@@ -10,28 +10,24 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE( FAbilityStateChangedAnimation );
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FDashAbilityStateChangedAnimation, EAbilityState, DashState );
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam( FAbilityStateChangedAnimationIsMoving, bool, IsMoving );
 
+//TO DO: Added this category to more easily filter the logs when debugging states
+DECLARE_LOG_CATEGORY_EXTERN(LogAbilityState, Log, All);
+
+//TO DO
+//Remove all hover component related stuff(since we moved the hover to be an environmental object(the updraft) instead of an ability)
+//The hover is still a state though, so all that stuff is still here
 UCLASS()
 class GROUP8_API UAbilityStateComponent : public UActorComponent
 {
 
 	GENERATED_BODY()
 
-
 		//Inherited functions & constructor
 public:
 
 	UAbilityStateComponent();
-
 	virtual void BeginPlay() override;
-
 	virtual void TickComponent( float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction ) override;
-
-	/*UFUNCTION()
-	void OnCharacterBeginOverlap( class UPrimitiveComponent* HitComp, class AActor* OtherActor,
-		class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult );
-
-	UFUNCTION()
-	void OnEndOverlap( class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex );*/
 
 	//Getters
 public:
@@ -74,10 +70,8 @@ protected:
 
 	FTimerDelegate DashEndTimerDelegate;
 	FTimerHandle DashEndHandle;
-	FTimerDelegate HoverTimerDelegate;
-	FTimerHandle HoverHandle;
+
 	bool bHasDashed = false;
-	bool bHasHovered = false;
 
 	float DashCooldownTimer = 0.f;
 
@@ -152,10 +146,4 @@ private:
 
 	UFUNCTION()
 	void OnDashHitInternal();
-
-
-
-
-
-
 };

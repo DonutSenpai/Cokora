@@ -13,6 +13,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Structs/GameModeSettings.h"
 
+//TO DO:
+// - Remove unused code
 UHandlePlayerCameraComponent::UHandlePlayerCameraComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -28,15 +30,11 @@ void UHandlePlayerCameraComponent::BeginPlay()
 	OwningChar->GetAbilityStateComponent()->AbilityStateChanged.AddDynamic( this, &UHandlePlayerCameraComponent::OnAbilityStateChanged );
 	AMainGameMode * GameMode = Cast<AMainGameMode>( GetWorld()->GetAuthGameMode() );
 	
-	
-
-	//GetWorld()->GetTimerManager().SetTimer( SceneryFadeHandle, this, &UHandlePlayerCameraComponent::FadeScenery, SceneryFadeTimer, true );
-
 	if ( GameMode )
 	{
 		GameMode->SettingsChanged.AddDynamic(this, &UHandlePlayerCameraComponent::OnGameSettingsChanged);
-		LocalLookVerticalSens = GameMode->GetGameSettings().LookVerticalSens;
-		LocalLookHorizontalSens = GameMode->GetGameSettings().LookHorizontalSens;
+		LocalLookVerticalSense = GameMode->GetGameSettings().LookVerticalSense;
+		LocalLookHorizontalSense = GameMode->GetGameSettings().LookHorizontalSense;
 
  		bVerticalInputInverted = GameMode->GetGameSettings().bInvertLookVertical;
  		bHorizontalInputInverted = GameMode->GetGameSettings().bInvertLookHorizontal;
@@ -53,8 +51,6 @@ void UHandlePlayerCameraComponent::TickComponent( float DeltaTime, enum ELevelTi
 	{
 		ResetCameraLerp( DeltaTime );
 	}
-
-
 }
 
 void UHandlePlayerCameraComponent::LookVertical( float InputValue )
@@ -66,7 +62,7 @@ void UHandlePlayerCameraComponent::LookVertical( float InputValue )
 
 	if ( InputValue != 0 )
 	{
-		OwningChar->PC->AddPitchInput( -InputValue * LookSpeed * LocalLookVerticalSens );
+		OwningChar->PC->AddPitchInput( -InputValue * LookSpeed * LocalLookVerticalSense );
 	}
 }
 
@@ -79,7 +75,7 @@ void UHandlePlayerCameraComponent::LookHorizontal( float InputValue )
 
 	if ( InputValue != 0.f )
 	{
-		OwningChar->PC->AddYawInput( InputValue * LookSpeed * LocalLookHorizontalSens );
+		OwningChar->PC->AddYawInput( InputValue * LookSpeed * LocalLookHorizontalSense );
 	}
 }
 
@@ -87,13 +83,6 @@ void UHandlePlayerCameraComponent::ResetCameraPosition()
 {
 	if ( bInputDisabled ) return;
 
-	//if ( ( OwningChar->InputComponent->GetAxisValue( "MoveForward" ) != 0 ||
-	//	OwningChar->InputComponent->GetAxisValue( "MoveRight" ) != 0 ||
-	//	OwningChar->InputComponent->GetAxisValue( "LookVertical" ) != 0 ||
-	//	OwningChar->InputComponent->GetAxisValue( "LookHorizontal" ) != 0 ) )
-	//{
-	//	return;
-	//}
 	bLerpCamera = true;
 }
 
@@ -118,13 +107,7 @@ void UHandlePlayerCameraComponent::ResetCameraLerp( float DeltaTime )
 	FVector NewVecDir;
 
 	if ( bDashLerp )
-	{
-		/*  CurrentX = FMath::FInterpConstantTo( OwningChar->GetControlRotation().Vector().X, TargetCameraVector.X, DeltaTime, DashInterpSpeed );
-			CurrentY = FMath::FInterpConstantTo( OwningChar->GetControlRotation().Vector().Y, TargetCameraVector.Y, DeltaTime, DashInterpSpeed );
-			CurrentZ = FMath::FInterpConstantTo( OwningChar->GetControlRotation().Vector().Z, TargetCameraVector.Z, DeltaTime, DashInterpSpeed );
-
-			NewVecDir = FVector( CurrentX, CurrentY, CurrentZ );*/
-
+	{		
 		NewVecDir = FMath::VInterpNormalRotationTo( OwningChar->GetControlRotation().Vector(), OwningChar->GetActorForwardVector(), DeltaTime, DashInterpSpeed );
 	}
 	else
@@ -133,11 +116,6 @@ void UHandlePlayerCameraComponent::ResetCameraLerp( float DeltaTime )
 	}
 
 	OwningChar->PC->SetControlRotation( NewVecDir.Rotation() );
-}
-
-void UHandlePlayerCameraComponent::ShakeCamera()
-{
-
 }
 
 void UHandlePlayerCameraComponent::FadeScenery()
@@ -151,24 +129,18 @@ void UHandlePlayerCameraComponent::FadeScenery()
 		FVector StartLocation = OwningChar->PC->PlayerCameraManager->GetCameraLocation();
 
 		const FVector EndLocation = OwningChar->GetActorLocation();
-		//UEngineTypes::ConvertToTraceType(ECollisionChannel::ECC_GameTraceChannel2);
 
 		FCollisionQueryParams Params;
-		//Params.bIgnoreBlocks = true;
+	
 
 		FCollisionResponse Response;
-
-		//FCollisionResponseParams ResponseParams = Response;
 		
 		FCollisionResponseContainer R;
 		R.SetAllChannels(ECR_Ignore);
 		R.SetResponse(ECollisionChannel::ECC_GameTraceChannel13, ECR_Overlap);
-
 		Response.SetAllChannels(ECR_Ignore);
-
 		Response.SetResponse(ECollisionChannel::ECC_GameTraceChannel13, ECR_Overlap);
-
-		//FCollisionResponseContainer Re = FCollisionResponseContainer(Response);
+		
 
 		if ( GetWorld()->LineTraceMultiByChannel( Hits, StartLocation, EndLocation, ECollisionChannel::ECC_GameTraceChannel13, Params /*,FCollisionResponseParams(Response)*/) )
 		{
@@ -217,8 +189,8 @@ void UHandlePlayerCameraComponent::OnAbilityStateChanged( EAbilityState NewState
 
 void UHandlePlayerCameraComponent::OnGameSettingsChanged( FGameModeSettings GameSettings )
 {
-	LocalLookVerticalSens = GameSettings.LookVerticalSens * LookSpeedMultiplier;
-	LocalLookHorizontalSens = GameSettings.LookHorizontalSens * LookSpeedMultiplier;
+	LocalLookVerticalSense = GameSettings.LookVerticalSense * LookSpeedMultiplier;
+	LocalLookHorizontalSense = GameSettings.LookHorizontalSense * LookSpeedMultiplier;
 
 	bVerticalInputInverted = GameSettings.bInvertLookVertical;
 	bHorizontalInputInverted = GameSettings.bInvertLookHorizontal;
